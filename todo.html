@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- fontawesome cdn -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="app-todo">
+                <div class="todo-input" v-if="searchFeature">
+                    <span @click="allCompleteTask">
+                        <i class="fas fa-chevron-down" :class="{ allCompleted : checkComplete}"></i>
+                    </span>
+                    <input type="text" @keyup.enter="addData" v-model="newTodo" id="" placeholder="What is needs to do?">
+                    <span>
+                        <i class="fas fa-search search-icon" @click="searchFeature = false"></i>
+                    </span>
+                </div>
+                <div class="search-input" v-else>
+                    <input type="text" v-focus placeholder="Search Task....." v-model="search">
+                </div>
+            </div>
+            <ul>
+                    <li v-for="(todo, index) in searchTodos">
+                            <div class="todo-list" :key="todo.id" v-if="!todo.edited">
+                                    <div class="todo-item" @dblclick="editTodo(todo)">
+                                        <input type="checkbox" class="todo-check" v-model="todo.done" @click="completeData(todo)">
+                                        <span :class="{done: todo.done}">{{ todo.task }}</span>
+                                    </div>
+                                    <div class="remove-item" >
+                                        <span @click="removeData(index)">X</span>
+                                    </div>
+                            </div>
+                            <div class="edit-todo" v-else>
+                                <input type="text" name="" id="" v-model="todo.task" @keyup.enter="editDone(todo)" @blur="editDone(todo)"  v-focus @keyup.esc="restoreData(todo)">
+                            </div>
+                        </li>  
+                    <div class="filter-task-container">
+                        <div class="left-task">
+                            <p>{{ remainderToDo }} items left</p>
+                        </div>                    
+                        <div class="filter-task-button">
+                            <button @click="filter = 'all'" :class="{ currentTodo : filter === 'all'}">All</button>
+                            <button @click="filter = 'active'" :class="{ currentTodo : filter === 'active'}">Active</button>
+                            <button @click="filter = 'complete'" :class="{ currentTodo : filter === 'complete'}">complete</button>
+                        </div>
+                        <transition name="fade">
+                            <div class="clear-completed-button" v-if="showClearComplete">
+                                <button @click="clearComplete">Clear Completed</button>
+                            </div>
+                        </transition>
+                    </div>
+            </ul>
+        </div>
+    </div>
+    <!-- Veujs Framwork js cdn -->
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
